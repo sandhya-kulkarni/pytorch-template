@@ -1,5 +1,5 @@
 {
-    "name": "Emnist_VggNet",
+    "name": "Emnist_vgg16",
     "n_gpu": 1,
 
     "arch": {

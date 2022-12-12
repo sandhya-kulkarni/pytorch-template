@@ -1,20 +1,20 @@
 {
-    "name": "Emnist_vgg16",
+    "name": "Cifar10_resnet",
     "n_gpu": 1,
 
     "arch": {
-        "type": "EmnistModel",
+        "type": "Cifar10Model",
         "args": {}
     },
     "data_loader": {
-        "type": "EmnistDataLoader",
+        "type": "Cifar10DataLoader",
         "args":{
-            "data_dir": "data/",
-            "split": "balanced",
+            "data_dir": "data",
             "batch_size": 128,
             "shuffle": true,
             "validation_split": 0.1,
             "num_workers": 2
+
         }
     },
     "optimizer": {

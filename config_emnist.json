@@ -1,15 +1,16 @@
 {
-    "name": "Mnist_LeNet",
+    "name": "Emnist_cnn",
     "n_gpu": 1,
 
     "arch": {
-        "type": "MnistModel",
+        "type": "EmnistModel",
         "args": {}
     },
     "data_loader": {
-        "type": "MnistDataLoader",
+        "type": "EmnistDataLoader",
         "args":{
             "data_dir": "data/",
+            "split": "balanced",
             "batch_size": 128,
             "shuffle": true,
             "validation_split": 0.1,
@@ -46,5 +47,6 @@
         "early_stop": 10,
 
         "tensorboard": true
+
     }
 }

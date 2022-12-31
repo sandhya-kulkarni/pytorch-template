@@ -6,20 +6,34 @@ import model.loss as module_loss
 import model.metric as module_metric
 import model.model as module_arch
 from parse_config import ConfigParser
+import wandb
+
+wandb.init(project="pt-1", entity="mails4sandhya")
 
 
 def main(config):
     logger = config.get_logger('test')
 
     # setup data_loader instances
-    data_loader = getattr(module_data, config['data_loader']['type'])(
-        config['data_loader']['args']['data_dir'],
-        batch_size=512,
-        shuffle=False,
-        validation_split=0.0,
-        training=False,
-        num_workers=2
-    )
+    if config['data_loader']['args']['split']:
+        data_loader = getattr(module_data, config['data_loader']['type'])(
+            config['data_loader']['args']['data_dir'],
+            split='balanced',
+            batch_size=128,
+            shuffle=False,
+            validation_split=0.0,
+            training=False,
+            num_workers=2
+        )
+    else:
+        data_loader = getattr(module_data, config['data_loader']['type'])(
+            config['data_loader']['args']['data_dir'],
+            batch_size=128,
+            shuffle=False,
+            validation_split=0.0,
+            training=False,
+            num_workers=2
+        )
 
     # build model architecture
     model = config.init_obj('arch', module_arch)
@@ -66,6 +80,7 @@ def main(config):
         met.__name__: total_metrics[i].item() / n_samples for i, met in enumerate(metric_fns)
     })
     logger.info(log)
+    wandb.log(log)
 
 
 if __name__ == '__main__':

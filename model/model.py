@@ -22,13 +22,33 @@ class MnistModel(BaseModel):
         x = F.dropout(x, training=self.training)
         x = self.fc2(x)
         return F.log_softmax(x, dim=1)
-
-
 # A simple custom 2 layers CNN model
+class EmnistModel(BaseModel):
+    def __init__(self, num_classes=47):
+        super().__init__()
+        self.conv1 = nn.Conv2d(in_channels=1, out_channels=32, kernel_size=5, stride=1)
+        self.conv2 = nn.Conv2d(32, 64, 5, 1)
+        self.fc = nn.Linear(64 * 20 * 20, num_classes)
+
+    def forward(self, x):
+        x = F.relu(self.conv1(x))
+        x = F.relu(self.conv2(x))
+        x = F.max_pool2d(x, 1)
+        x = torch.flatten(x, 1)
+        x = self.fc(x)
+        output = F.log_softmax(x, dim=1)
+        return output
+
+
+# Using a pre-existing resnet model
 class Cifar10Model(BaseModel):
     def __init__(self, num_classes=10):
         super().__init__()
-        self.resnet = models.resnet50(num_classes=num_classes, pretrained=False)
+        self.resnet = models.resnet50(pretrained=True)
+        for param in self.resnet.parameters():
+            param.require_grad = False
+        num_ftrs = self.resnet.fc.in_features
+        self.resnet.fc = nn.Linear(num_ftrs, num_classes)
 
     def forward(self, x):
         out = self.resnet.forward(x)

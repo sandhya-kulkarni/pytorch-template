@@ -3,6 +3,12 @@ import torch
 from torchvision.utils import make_grid
 from base import BaseTrainer
 from utils import inf_loop, MetricTracker
+import wandb
+
+wandb.init(project="pt-1",
+           entity="mails4sandhya",
+           config={"epochs": 0, "batch_size": 128, "lr": 0.001, "gamma": 0.1})
+# wandb.init(config={"epochs": 0, "batch_size": 128, "lr": 0.001, "gamma": 0.1 })
 
 
 class Trainer(BaseTrainer):
@@ -38,6 +44,7 @@ class Trainer(BaseTrainer):
         :return: A log that contains average loss and metric in this epoch.
         """
         self.model.train()
+        wandb.watch(self.model)
         self.train_metrics.reset()
         for batch_idx, (data, target) in enumerate(self.data_loader):
             data, target = data.to(self.device), target.to(self.device)
@@ -70,6 +77,7 @@ class Trainer(BaseTrainer):
 
         if self.lr_scheduler is not None:
             self.lr_scheduler.step()
+        wandb.log(log)
         return log
 
     def _valid_epoch(self, epoch):

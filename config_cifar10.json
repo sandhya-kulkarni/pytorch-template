@@ -1,19 +1,20 @@
 {
-    "name": "Mnist_LeNet",
+    "name": "Cifar10_resnet",
     "n_gpu": 1,
 
     "arch": {
-        "type": "MnistModel",
+        "type": "Cifar10Model",
         "args": {}
     },
     "data_loader": {
-        "type": "MnistDataLoader",
+        "type": "Cifar10DataLoader",
         "args":{
-            "data_dir": "data/",
+            "data_dir": "data",
             "batch_size": 128,
             "shuffle": true,
             "validation_split": 0.1,
             "num_workers": 2
+
         }
     },
     "optimizer": {
@@ -41,7 +42,7 @@
         "save_dir": "saved/",
         "save_period": 1,
         "verbosity": 2,
-
+        
         "monitor": "min val_loss",
         "early_stop": 10,
 
